@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Panel - MyStore</title>
+  <link rel="stylesheet" href="./css/styles.css">
+</head>
+<body>
+  <script>
+    if (localStorage.getItem("token") !== "admin") {
+      window.location.href = "login.html";
+    }
+  </script>
+<script>
+  document.getElementById("logout-link")?.addEventListener("click", () => {
+    localStorage.removeItem("role");
+    window.location.href = "login.html";
+  });
+</script>
+  <header class="navbar">
+    <div class="container nav-content">
+      <div class="nav-left">
+        <a href="index.html" class="logo">🛍️ MyStore</a>
+      </div>
+      <div class="nav-right">
+        <nav>
+          <a href="index.html">Home</a>
+          <a href="cart.html">Cart</a>
+          <a href="#" onclick="logout()">Logout</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <h1>Admin Panel</h1>
+    <p>Upload new products (demo only)</p>
+
+    <input type="text" id="prod-name" placeholder="Product name" />
+    <input type="text" id="prod-price" placeholder="Price" />
+    <input type="text" id="prod-image" placeholder="Image URL" />
+    <input type="text" id="prod-desc" placeholder="Description" />
+    <button onclick="uploadProduct()">Upload</button>
+
+    <p id="upload-msg"></p>
+  </main>
+
+  <script>
+    function logout() {
+      localStorage.removeItem("role");
+      window.location.href = "login.html";
+    }
+
+    function uploadProduct() {
+      const name = document.getElementById("prod-name").value;
+      const price = document.getElementById("prod-price").value;
+      const image = document.getElementById("prod-image").value;
+      const desc = document.getElementById("prod-desc").value;
+
+      if (!name || !price || !image || !desc) {
+        document.getElementById("upload-msg").textContent = "Please fill all fields.";
+        return;
+      }
+
+      // In real app, you'd POST to backend
+      document.getElementById("upload-msg").textContent = `Product "${name}" uploaded successfully (demo only).`;
+    }
+  </script>
+</body>
+<script>
+  const role = localStorage.getItem("role");
+  if (role === "admin") {
+    const adminLink = document.getElementById("admin-link");
+    if (adminLink) adminLink.style.display = "inline";
+  }
+
+  const logout = document.getElementById("logout-link");
+  if (logout) {
+    logout.addEventListener("click", () => {
+      localStorage.removeItem("token");
+      localStorage.removeItem("username");
+      localStorage.removeItem("role");
+      window.location.href = "login.html";
+    });
+  }
+</script>
+</html>

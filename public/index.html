@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>MyStore - Home</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #f5f5f5;
+    }
+    header {
+      background: #222;
+      color: #fff;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo {
+      font-size: 1.4rem;
+      font-weight: bold;
+    }
+    nav a {
+      color: #fff;
+      margin-left: 15px;
+      text-decoration: none;
+    }
+    .search-bar {
+      background: #fff;
+      padding: 10px 20px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      border-bottom: 1px solid #ddd;
+    }
+    .search-bar input[type="text"] {
+      flex: 1;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .search-bar select {
+      padding: 8px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+    .search-bar button {
+      padding: 8px 16px;
+      border: none;
+      background: #222;
+      color: #fff;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    main {
+      padding: 20px;
+    }
+    h1 {
+      margin-top: 0;
+      margin-bottom: 15px;
+    }
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 15px;
+    }
+    .product-card {
+      background: #fff;
+      border-radius: 6px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+    .product-card img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      background: #eee;
+    }
+    .product-body {
+      padding: 10px 12px 12px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .product-name {
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+    .product-price {
+      font-weight: bold;
+      color: #007b00;
+    }
+    .product-category {
+      font-size: 0.8rem;
+      color: #555;
+    }
+    .product-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 8px;
+    }
+    .btn-add-cart {
+      padding: 6px 10px;
+      font-size: 0.85rem;
+      border: none;
+      background: #ff6a00;
+      color: #fff;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .heart {
+      font-size: 1.3rem;
+      cursor: pointer;
+      user-select: none;
+      transition: color 0.2s;
+      color: black;
+    }
+    .heart.liked {
+      color: red;
+    }
+    footer {
+      text-align: center;
+      padding: 15px;
+      background: #222;
+      color: #fff;
+      font-size: 0.85rem;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">MyStore</div>
+    <nav>
+      <a href="index.html">Home</a>
+     <a href="favourites.html">Favourites <span id="fav-count">2</span></a>
+      <a href="cart.html">Cart <span id="cart-count">0</span></a>
+      <a href="admin.html">Admin</a>
+      <a href="login.html" id="logout-link">Logout</a>
+    </nav>
+  </header>
+
+  <div class="search-bar">
+    <input type="text" id="search-input" placeholder="Search for products..." />
+    <select id="category-select">
+  <option value="all">All Categories</option>
+  <option value="Fashion">Fashion</option>
+  <option value="Electronics">Electronics</option>
+  <option value="Home & Kitchen">Home & Kitchen</option>
+  <option value="Sports">Sports</option>
+  <option value="Toys">Toys</option>
+    <option value="Beauty">Beauty</option>
+</select>
+    <button id="search-btn">Search</button>
+  </div>
+
+  <main>
+    <h1>Featured Products</h1>
+    <div id="products-container" class="products-grid">
+      <!-- Products injected via JS -->
+    </div>
+  </main>
+
+  <footer>
+    © MyStore. All rights reserved.
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

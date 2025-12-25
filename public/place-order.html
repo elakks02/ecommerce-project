@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>MyStore - Place Order</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #f5f5f5;
+    }
+    header {
+      background: #222;
+      color: #fff;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo {
+      font-size: 1.4rem;
+      font-weight: bold;
+    }
+    nav a {
+      color: #fff;
+      margin-left: 15px;
+      text-decoration: none;
+    }
+    main {
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .order-summary, .checkout-form {
+      background: #fff;
+      padding: 20px;
+      border-radius: 6px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+    .order-summary p {
+      margin: 8px 0;
+      font-size: 1rem;
+    }
+    .order-summary .total {
+      font-weight: bold;
+      font-size: 1.1rem;
+      margin-top: 12px;
+    }
+    .checkout-form label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    .checkout-form input, .checkout-form textarea, .checkout-form select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .btn-place-order {
+      display: block;
+      width: 100%;
+      margin-top: 20px;
+      padding: 10px;
+      font-size: 1rem;
+      background: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .btn-place-order:hover {
+      background: #0056b3;
+    }
+    footer {
+      text-align: center;
+      padding: 15px;
+      background: #222;
+      color: #fff;
+      font-size: 0.85rem;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">MyStore</div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="favourites.html">Favourites <span id="fav-count">0</span></a>
+      <a href="cart.html">Cart <span id="cart-count">0</span></a>
+      <a href="admin.html">Admin</a>
+      <a href="login.html">Logout</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Checkout</h1>
+
+    <div class="order-summary">
+      <p>Subtotal: ₹<span id="subtotal">0</span></p>
+      <p>Shipping: ₹<span id="shipping">100</span></p>
+      <p class="total">Total: ₹<span id="total">0</span></p>
+    </div>
+
+    <form class="checkout-form" id="checkout-form">
+      <label for="name">Full Name</label>
+      <input type="text" id="name" required />
+
+      <label for="phone">Phone Number</label>
+      <input type="tel" id="phone" required />
+
+      <label for="email">Email</label>
+      <input type="email" id="email" required />
+
+      <label for="address">Shipping Address</label>
+      <textarea id="address" rows="3" required></textarea>
+
+      <label for="payment">Payment Method</label>
+      <select id="payment" required>
+        <option value="">Select</option>
+        <option value="cod">Cash on Delivery</option>
+        <option value="card">Credit/Debit Card</option>
+        <option value="upi">UPI</option>
+      </select>
+
+      <button type="submit" class="btn-place-order">Confirm Order</button>
+    </form>
+  </main>
+
+  <footer>
+    © 2023 MyStore. All rights reserved.
+  </footer>
+
+  <script>
+    function getCart() {
+      const data = localStorage.getItem("cart");
+      return data ? JSON.parse(data) : [];
+    }
+
+    function updateCartCount() {
+      const cart = getCart();
+      const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+      const el = document.getElementById("cart-count");
+      if (el) el.textContent = count;
+    }
+
+    function updateFavCount() {
+      const data = localStorage.getItem("favourites");
+      try {
+        const favs = JSON.parse(data);
+        const valid = Array.isArray(favs) ? favs.filter(f => typeof f === "string" && f.length > 0) : [];
+        const el = document.getElementById("fav-count");
+        if (el) el.textContent = valid.length;
+      } catch {
+        if (document.getElementById("fav-count")) document.getElementById("fav-count").textContent = "0";
+      }
+    }
+
+    function calculateTotal() {
+      const cart = getCart();
+      const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+      const shipping = cart.length > 0 ? 100 : 0;
+      const total = subtotal + shipping;
+
+      document.getElementById("subtotal").textContent = subtotal;
+      document.getElementById("shipping").textContent = shipping;
+      document.getElementById("total").textContent = total;
+    }
+
+    document.getElementById("checkout-form").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const name = document.getElementById("name").value;
+      const phone = document.getElementById("phone").value;
+      const email = document.getElementById("email").value;
+      const address = document.getElementById("address").value;
+      const payment = document.getElementById("payment").value;
+
+      if (!name || !phone || !email || !address || !payment) {
+        alert("Please fill in all details.");
+        return;
+      }
+
+      // Clear cart after placing order
+      localStorage.removeItem("cart");
+      updateCartCount();
+
+      alert(`Order placed successfully!\n\nName: ${name}\nPhone: ${phone}\nEmail: ${email}\nAddress: ${address}\nPayment: ${payment}`);
+      window.location.href = "index.html";
+    });
+
+    document.addEventListener("DOMContentLoaded", () => {
+      updateCartCount();
+      updateFavCount();
+      calculateTotal();
+    });
+  </script>
+</body>
+</html>

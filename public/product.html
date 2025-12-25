@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Product Details - My Store</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="./css/styles.css" />
+</head>
+<script>
+  if (!localStorage.getItem("token")) {
+    window.location.href = "login.html";
+  }
+</script>
+<script>
+  document.getElementById("logout-link")?.addEventListener("click", () => {
+    localStorage.removeItem("role");
+    window.location.href = "login.html";
+  });
+</script>
+<body>
+  <header class="navbar">
+  <div class="container nav-content">
+    <div class="nav-left">
+      <a href="index.html" class="logo">🛍️ MyStore</a>
+    </div>
+    <div class="nav-right">
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="favourites.html">Favourites <span id="fav-count">0</span></a>
+        <a href="cart.html">Cart <span id="cart-count">0</span></a>
+        <a href="admin.html">Admin</a>
+        <a href="#" id="logout-link">Logout</a>
+      </nav>
+    </div>
+  </div>
+</header>
+
+  <main class="container">
+    <div id="product-details" class="product-details">
+      <!-- Product details will be loaded here -->
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>© <span id="year"></span> MyStore. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="./js/product.js"></script>
+</body>
+<script>
+  const role = localStorage.getItem("role");
+  if (role === "admin") {
+    const adminLink = document.getElementById("admin-link");
+    if (adminLink) adminLink.style.display = "inline";
+  }
+
+  const logout = document.getElementById("logout-link");
+  if (logout) {
+    logout.addEventListener("click", () => {
+      localStorage.removeItem("token");
+      localStorage.removeItem("username");
+      localStorage.removeItem("role");
+      window.location.href = "login.html";
+    });
+  }
+</script>
+<button onclick="addToCart('PRODUCT_ID')">Add to Cart</button>
+
+<script>
+async function addToCart(productId) {
+  const token = localStorage.getItem('token'); // from login
+  const res = await fetch('/api/cart', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
+    body: JSON.stringify({ productId, quantity: 1 })
+  });
+  const data = await res.json();
+  console.log('Cart updated:', data);
+}
+</script>
+</html>
